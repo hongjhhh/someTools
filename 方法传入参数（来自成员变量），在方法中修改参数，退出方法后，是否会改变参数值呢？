@@ -1,0 +1,96 @@
+现在列出三种不同的方法传入参数；
+
+1、传入参数为整形变量：
+
+public static void main(String[] args){
+
+         int a = 10;
+
+         System.out.println(a);
+
+         test(a);
+
+         System.out.println(a);
+
+}
+
+public static void test(int num){
+
+         num=20;
+
+}
+
+输出
+
+ 10
+
+ 10
+
+为什么方法退出后，变量值由变回去了呢？
+
+说明：在java类执行时，基本类型变量是存储在栈中的，压栈顺序：(1)主方法压栈->(2)变量a压栈->(3)静态方法test压栈->(4)压栈参数并修改为20->(5)退出test方法，并弹出test方法及其作用域内的数据->(6) 退出main方法。
+
+打印结果第一个10是打印未经过方法修改的变量值，第二个10是打印经过方法修改为20后，退出方法后打印的变量的值，由于基本数据类型存储在栈中，因此退出方法后，变量的值仍然是变量最初所在栈位置的值10.
+
+2、传入参数为数组：
+
+public static void main(String[] args){
+
+                   int[]a = {23,57};
+                   print(a);
+                   test(a);
+                   print(a);
+         }
+
+
+         publicstatic void test(int[] num){ //颠倒数组
+                   inttemp = 0;
+                   for(inti = 0;i < num.length/2; i++){
+                            temp= num[i];
+                            num[i]= num[num.length - 1 - i];
+                            num[num.length- 1 - i] = temp;
+                   }        
+         }
+
+         publicstatic void print(int[] num){ //打印数组
+
+
+                   for(inti = 0; i < num.length; i++){
+                   System.out.print(num[i]+"");
+                   }
+                   System.out.println();
+         }
+
+输出：
+
+ 23 57
+
+ 57 23
+
+为什么在这里方法退出后，变量的值变不回去了呢？
+
+说明：在java中，数组是引用类型变量，可以看成是一个对象，在创建一个数组时，和创建一个新的对象时同样的道理（毕竟创建时使用new关键字了），这个对象存放在堆内存中，栈内存中只是存放了它的位置索引（即在堆内存中的位置，相当于栈中放了它的门牌号），这样在test方法中引用了数组变量，同样是通过栈中存放的位置索引找到这个变量在堆内存中的位置，然后进行修改操作，test方法可不是将它重新压到栈中再修改的，是直接在堆中改，直接在堆中改，直接在堆中改(重要的事情说三遍)，然后很淡定的退出了test方法，它是退出没事了，堆中的数组变量已经被不可逆转的修改了，因此test方法前和方法后打印出来的数组内容是不一样的。（可不要认为按这个道理，引用类型变量都是这样的，错！客官请往下看）。
+
+3、传入参数为字符串变量：
+
+         public static void main(String[] args){
+
+
+                   Stringa = "hello world";
+                   System.out.println(a);
+                   test(a);
+                   System.out.println(a);
+                   }
+         publicstatic void test(String str){
+                   str= "HELLO WORLD";
+                   }
+
+输出
+
+ hello world
+
+ hello world
+
+看到没，退出方法后，发现字符串又恢复原状了，字符串是引用类型变量，按照第二种情况的结果，这里变量的值应该回不去了，那么这里为什么就回去了呢？
+
+在http://www.cnblogs.com/alexlo/p/4106394.html中作者提到，查看源码可以知道String类的存储是通过char[]来实现的，类似于Integer是int包装类、Float是float的包装类，对包装类的操作实质上时对基本类型的操作，因此String类像包装类一样，体现出基本数据类型的这种特征，即退出方法后字符串并没有变。
