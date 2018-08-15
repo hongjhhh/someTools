@@ -24,3 +24,4 @@ public static void main(String[] args) {
         System.out.println(new Timestamp(zero));//今天零点零分零秒
         System.out.println(new Timestamp(twelve));//今天23点59分59秒
 }
+以上方法在某些时间段失效，一般在凌晨
