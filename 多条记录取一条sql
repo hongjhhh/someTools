@@ -1,0 +1,2 @@
+SELECT i1.* FROM health_store_statistic i1 WHERE i1.state=1 and NOT EXISTS (SELECT 1 FROM health_store_statistic i2 where i2.state=1 " +
+                " and i1.store_id = i2.store_id AND i1.create_time < i2.create_time)
